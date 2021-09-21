@@ -1,7 +1,7 @@
 # Tugas 1 
 
-# Nama : Nizar Mayraldo
-# NRP  : 05111940000004
+* Nama : Nizar Mayraldo
+* NRP  : 05111940000004
 
 ## Tugas 
 * Cari benda di sekitar Anda yang berawalan huruf B, G, atau L.
