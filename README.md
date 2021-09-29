@@ -9,7 +9,7 @@
 * Ambil foto benda tersebut dari empat sudut pandang yang berbeda: kanan atas, kiri atas, belakang atas, depan atas (sudut kemiringan bebas).
 * Buat sebuah file README.md yang berisikan nama benda berikut empat foto yang telah Anda ambil sebelumnya.
 
-# Benda yang digunakan : Buku Novel
+# Benda yang digunakan : Baterai
 
 ### Foto Atas Depan
 
