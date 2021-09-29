@@ -13,16 +13,16 @@
 
 ### Foto Atas Depan
 
-![AtasDepan](https://github.com/cg2021b/tugas-1-Nizar951/blob/master/image/Depan%20atas.jpg)
+![Depan](https://user-images.githubusercontent.com/55136116/135224513-13d19b5a-3faa-42d4-acfe-1a12ce4dff1c.jpg)
 
 ### Foto Atas Kiri
 
-![AtasDepan](https://github.com/cg2021b/tugas-1-Nizar951/blob/master/image/Kiri%20atas.jpg)
+![Kiri](https://user-images.githubusercontent.com/55136116/135224551-32960775-ff91-4d85-8bb8-82fab39fe4d8.jpg)
 
 ### Foto Atas Kanan
 
-![AtasDepan](https://github.com/cg2021b/tugas-1-Nizar951/blob/master/image/Kanan%20Atas.jpg)
+![Kanan](https://user-images.githubusercontent.com/55136116/135224570-90871423-27e1-49b2-bce9-c2fad11c13ce.jpg)
 
 ### Foto Atas Belakang
 
-![AtasDepan](https://github.com/cg2021b/tugas-1-Nizar951/blob/master/image/Belakang%20atas.jpg)
+![Belakang](https://user-images.githubusercontent.com/55136116/135224593-1e3ad7fa-f929-42fa-bfb6-edc360a0f511.jpg)
