@@ -6,7 +6,7 @@ function cos(a){
     return Math.cos(Math.PI * a);
 }
 
-function gelasKiri(){
+function bateraikiri(){
     var kiri = [];
     let A,B,C,D,E;
     
@@ -212,10 +212,59 @@ function gelasKiri(){
 
         kiri = kiri.concat(vertex_1, vertex_2, vertex_3);
     }
+
+    // // detail atas
+    // for(var i = 0; i<=180; i+=1)
+    // {
+    //     let j = (i + 270) / 180;
+    //     let k = (i + 271) / 180;
+        
+        
+    //     var vertex_1 = [
+    //         sin(j) * 0.03 - 0.5 , cos(j) * 0.03 + 0.655,
+    //         200/255, 200/255, 200/255,
+    //     ];
+    
+    //     var vertex_2 = [
+    //         -0.5, 0.655, 
+    //         200/255, 200/255, 200/255,
+    //     ];
+
+    //     var vertex_3 = [
+    //         sin(k) * 0.03 - 0.5 , cos(k) * 0.03 + 0.655,
+    //         200/255, 200/255, 200/255,
+    //     ];
+
+    //     kiri = kiri.concat(vertex_1, vertex_2, vertex_3);
+    // }
+
+    // // detail bawah
+    // for(var i = 90; i<=270; i+=1)
+    // {
+    //     var j = i / 180;
+    //     var k = (i+1) / 180;
+    //     var vertex_1 = [
+    //         sin(j) * 0.03 - 0.5 , cos(j) * 0.03 + 0.625, 
+    //         130/255, 130/255, 130/255,
+    //     ];
+
+    //     var vertex_2 = [
+    //         -0.5, 0.625, 
+    //         130/255, 130/255, 130/255,
+    //     ];
+
+    //     var vertex_3 = [
+    //         sin(k) * 0.03 - 0.5 , cos(k) * 0.03 + 0.625,
+    //         130/255, 130/255, 130/255,
+    //     ];
+
+    //     kiri = kiri.concat(vertex_1, vertex_2, vertex_3);
+    // }
+
     return kiri;
 }
 
-function gelasKanan(){
+function bateraikanan(){
     var kanan = [];
     let A,B,C,D,E;
     

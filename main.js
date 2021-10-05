@@ -4,11 +4,11 @@ function main(){
 
     var kiri = [];
 
-    kiri = gelasKiri();
+    kiri = bateraikiri();
     
     var kanan = [];
 
-    kanan = gelasKanan();
+    kanan = bateraikanan();
 
     var vertices = [...kiri, ...kanan]
     var kiri_len = kiri.length / 5;
