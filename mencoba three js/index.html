@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script src="js/three.min.js"></script>
+</head>
+<body>
+    
+</body>
+</html>
+
+
+<script>
+// import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js';  
+    let scene, camera, renderer, raycaster;
+    let geometry, material, mesh;
+    
+
+    const loader = new THREE.TextureLoader();
+    
+    // set up the environment - 
+    // initiallize scene, camera, objects and renderer
+    let cubefunc = function(){
+        
+        geometry = new THREE.BoxGeometry( 2, 2, 2 );
+        material = new THREE.MeshLambertMaterial( {
+            color: 0x00ff00,
+            
+            // map: loader.load('https://threejsfundamentals.org/threejs/resources/images/wall.jpg'),
+        } );
+        cube = new THREE.Mesh( geometry, material );
+        cube.position.x = -5;
+        cube.position.y = 2;
+        cube.position.z = 0;
+        
+        scene.add( cube );
+        // cubes.push(cube);
+    }
+
+    let bolafunc = function(){
+        geometry = new THREE.SphereGeometry( 1.25, 32, 16 ); 
+        material = new THREE.MeshPhongMaterial( {
+            color:'rgb(0,0,255)',
+            shininess : 100
+        } );
+        sphere = new THREE.Mesh( geometry, material );
+        sphere.position.x = 0;
+        sphere.position.y = 2;
+        sphere.position.z = 0;
+        scene.add( sphere );
+    }
+
+    let torusfunc = function(){
+        geometry = new THREE.TorusKnotGeometry( 0.3, 0.1, 100, 16 );
+        material = new THREE.MeshDepthMaterial( { 
+            color: 'rgb(255,0,0)',
+            wireframe : true
+        } );
+        torusKnot = new THREE.Mesh( geometry, material );
+        torusKnot.position.x = 1.5;
+        torusKnot.position.y = 0.5;
+        torusKnot.position.z = 11;
+        scene.add( torusKnot );
+    }
+
+    let lighting = function(){
+        const color = 0xFFFFFF;
+        const intensity = 1;
+        // const light = new THREE.DirectionalLight(color, intensity);
+        const light = new THREE.SpotLight(color, intensity);
+        //asal lampu
+        light.position.set(0,  3, 12)
+        // arah lampu
+        light.target.position.set(0,  0, 0)
+        scene.add(light);
+        scene.add(light.target);
+        
+        // const helper = new THREE.DirectionalLightHelper(light);
+        const helper = new THREE.SpotLightHelper(light);
+        // scene.add(helper);
+    }
+    let init = function() {
+        // 1. create the scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xababab);
+        
+        
+        // 2. create an locate the camera       
+        camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.z = 15;
+        
+        // 3. create an locate the object on the scene           
+        cubefunc();
+        lighting();
+        bolafunc();
+        torusfunc();
+        // 4. create the renderer     
+        renderer = new THREE.WebGLRenderer();   
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        document.body.appendChild(renderer.domElement);
+        
+    };
+  
+    
+    // main animation loop - calls 50-60 in a second.
+    let mainLoop = function(time) {
+          // convert time to seconds
+        time = 0.002;
+        cube.rotation.x += time;
+        cube.rotation.y += time;
+
+        sphere.rotation.x += time;
+        sphere.rotation.y += time;
+
+        torusKnot.rotation.x += time;
+        torusKnot.rotation.y += time;
+        console.log("Hello");
+        renderer.render(scene, camera);
+        requestAnimationFrame(mainLoop);
+    };
+    
+    init();
+    mainLoop();
+</script>
