@@ -1,23 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Tugas threejs</title>
     <script src="js/three.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <style>
+        * {
+                margin: 0;
+                padding: 0;
+                background-color: black;
+                color: white;
+        }
+</style>
 </head>
 <body>
-    
+    <h1 style="text-align: center; font-family: poppins;">Mencoba Three.js</h1>
+    <h3 style="text-align: center; font-family: poppins;">Nizar Mayraldo || 05111940000004</h3>
 </body>
 </html>
 
 
 <script>
-// import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r132/build/three.module.js';  
+
     let scene, camera, renderer, raycaster;
     let geometry, material, mesh;
     
 
     const loader = new THREE.TextureLoader();
-    
+
+    class CustomSinCurve extends THREE.Curve {
+        constructor(scale) {
+            super();
+            this.scale = scale;
+        }
+        getPoint(t) {
+            const tx = t * 3 - 1.5;
+            const ty = Math.sin(2 * Math.PI * t);
+            const tz = 0;
+            return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale);
+        }
+    }
     // set up the environment - 
     // initiallize scene, camera, objects and renderer
     let cubefunc = function(){
@@ -34,7 +56,7 @@
         cube.position.z = 0;
         
         scene.add( cube );
-        // cubes.push(cube);
+        
     }
 
     let bolafunc = function(){
@@ -50,7 +72,7 @@
         scene.add( sphere );
     }
 
-    let torusfunc = function(){
+    let torusknotfunc = function(){
         geometry = new THREE.TorusKnotGeometry( 0.3, 0.1, 100, 16 );
         material = new THREE.MeshDepthMaterial( { 
             color: 'rgb(255,0,0)',
@@ -61,6 +83,52 @@
         torusKnot.position.y = 0.5;
         torusKnot.position.z = 11;
         scene.add( torusKnot );
+    }
+
+    let wirefunc = function(){
+        geometry = new THREE.SphereGeometry( 1.25, 3, 15 );
+        wireframe = new THREE.WireframeGeometry( geometry );
+        line = new THREE.LineSegments( wireframe );
+        
+        line.material.opacity = 0.5;
+        line.material.transparent = false;
+
+        line.position.x = -5;
+        line.position.y = -1;
+        line.position.z = 0;
+
+        scene.add( line );
+    }
+
+    let tubefunc = function(){
+        path = new CustomSinCurve( 1 );
+        geometry = new THREE.TubeGeometry( path, 60, 0.1, 15, false );
+        material = new THREE.MeshBasicMaterial( { 
+            color: 0xFFFF00,
+            wireframe : true
+        } );
+        mesh = new THREE.Mesh( geometry, material );
+        
+        mesh.position.x = 0;
+        mesh.position.y = -1;
+        mesh.position.z = 0;
+        scene.add( mesh );
+    }
+
+    let torusfunc = function(){
+        geometry = new THREE.TorusGeometry( 5, 2, 20, 100 );
+        material = new THREE.MeshPhysicalMaterial( { 
+            color: 0xFF0000,
+            clearcoat : 1,
+            clearcoatRoughness : 0.3
+        } );
+        torus = new THREE.Mesh( geometry, material 
+        );
+
+        torus.position.x = 20;
+        torus.position.y = -5;
+        torus.position.z = -45;
+        scene.add( torus );
     }
 
     let lighting = function(){
@@ -83,7 +151,10 @@
         // 1. create the scene
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0xababab);
-        
+        // scene.rotateX(-Math.PI * 0.25);
+        // scene.rotateY(Math.PI * 0.04);
+        // scene.rotateZ(Math.PI * 0.7);
+
         
         // 2. create an locate the camera       
         camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
@@ -93,13 +164,17 @@
         cubefunc();
         lighting();
         bolafunc();
+        torusknotfunc();
+        wirefunc();
+        tubefunc();
         torusfunc();
         // 4. create the renderer     
         renderer = new THREE.WebGLRenderer();   
         renderer.setSize(window.innerWidth, window.innerHeight);
         
         document.body.appendChild(renderer.domElement);
-        
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        renderer.render(scene, camera, controls);
     };
   
     
@@ -115,6 +190,15 @@
 
         torusKnot.rotation.x += time;
         torusKnot.rotation.y += time;
+
+        line.rotation.x += time;
+        line.rotation.y += time;
+
+        mesh.rotation.x += time;
+        mesh.rotation.y += time;
+
+        torus.rotation.x += time;
+        torus.rotation.y += time;
         console.log("Hello");
         renderer.render(scene, camera);
         requestAnimationFrame(mainLoop);
