@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script src="js/three.min.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>Nizar Mayraldo || 05111940000004</header>
+    <div class="score down">
+        <h1>Score:
+            <a id="score">0</a>
+        </h1>
+    </div>
+    <div class="down">
+        <button id="myBtn">
+            <h2>Jangan Ditekan</h2>
+        </button>
+    </div>
+</body>
+</html>
+
+<script>
+    document.getElementById("myBtn").addEventListener("click", function () {
+        location.reload();
+    });
+
+</script>
+
+<script>    
+    let scene, camera, renderer, light1, light2, rayCast, mouse;
+
+    let current = document.getElementById("score");
+    let clicked;
+
+    let score = 0;
+    let i = 0;
+    let selected = [];
+    let original = [];
+    const MAX = 32;
+
+    const sizes = {
+        width: window.innerWidth,
+        height: window.innerHeight
+    }
+
+    window.addEventListener('resize', () => {
+        sizes.width = window.innerWidth
+        sizes.height = window.innerHeight
+
+        camera.aspect = sizes.width / sizes.height
+        camera.updateProjectionMatrix()
+
+        renderer.setSize(sizes.width, sizes.height)
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    });
+
+    function getRandomBetween(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+
+    const colors = [0x73ff00, 0xff0000, 0x003fff, 0xae00ff,
+        0xfff900, 0x00feff];
+
+
+    let createIcosahedron = function () {
+        const color = colors[Math.floor(getRandomBetween(0, 6))];
+        const fiveTone = new THREE.TextureLoader().load('gradasi.jpg');
+        let material = new THREE.MeshPhongMaterial({
+            color: color,
+            
+        });
+        let geometry = new THREE.IcosahedronGeometry(4.5);
+        let Icosahedron = new THREE.Mesh(geometry, material);
+        Icosahedron.position.x = getRandomBetween(-30, 30);
+        Icosahedron.position.y = getRandomBetween(-30, 30);
+        Icosahedron.position.z = getRandomBetween(-30, 30);
+        scene.add(Icosahedron);
+    }
+
+
+    let disposed = function (obj) {
+        obj.geometry.dispose();
+        obj.material.dispose();
+        scene.remove(obj);
+        renderer.renderLists.dispose();
+    }
+
+    let calculate = function () {
+
+        if (selected[0].material.color.getHex() === selected[1].material.color.getHex()) {
+            selected.forEach(object => {
+                disposed(object);
+            });
+            score += 1;
+        }
+        else {
+            score -= 1;
+        }
+
+        current.innerHTML = score;
+        original.length = 0;
+        selected.length = 0;
+    }
+
+    let onMouseClick = function (e) {
+        clicked = 0;
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
+        rayCast.setFromCamera(mouse, camera);
+
+        let intersects = rayCast.intersectObjects(scene.children, false);
+
+        if (intersects[0]) {
+            let firstObject = intersects[0].object;
+            if (selected.length > 0) {
+                if (firstObject.uuid === selected[0].uuid) {
+                    firstObject.material.emissive.setHex(0x000000);
+                    selected = [];
+                    originalColors = [];
+                    return;
+                }
+            }
+
+            selected.push(firstObject);
+            original.push(firstObject.material.color.getHex());
+            if (selected.length > 1) {
+                calculate();
+            }
+
+            if (selected.length == 1) {
+
+                if (clicked == 1) {
+                    selected.pop(firstObject);
+                    original.pop(firstObject.material.color.getHex());
+                }
+                clicked = 1;
+            }
+
+        }
+    }
+
+
+    // set up the environment - 
+    // initiallize scene, camera, objects and renderer
+    let init = function () {
+        // 1. create the scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+
+        // 2. create an locate the camera       
+        camera = new THREE.PerspectiveCamera(75,window.innerWidth / window.innerHeight,1, 1000);
+        camera.position.set(-20, 30, 60);
+
+        light1 = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(light1);
+
+        let point = new THREE.PointLight(0xffffff, 1, 100);
+        point.position.set(0, 20, 30);
+        scene.add(point);
+
+        rayCast = new THREE.Raycaster();
+        mouse = new THREE.Vector2();
+        mouse.x = mouse.y = -1;
+
+        // 3. create an locate the object on the scene           
+        while (i < MAX) {
+            createIcosahedron();
+            i++;
+        }
+
+        // 4. create the renderer     
+        document.addEventListener("click", onMouseClick);
+        
+        renderer = new THREE.WebGLRenderer( { alpha: true });
+        renderer.setClearColor( 0x000000, 0 );
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        renderer.render(scene, camera, controls);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    };
+
+    let clock = new THREE.Clock();
+    let flag = 0, speed;
+
+    // main animation loop - calls 50-60 in a second.
+    let mainLoop = function () {
+        if (scene.children.length >= MAX) {
+            flag = 0;
+            speed = 0;
+            current.innerHTML = score;
+        } else {
+            flag += 1;
+        }
+
+        if (flag > 1) {
+            setTimeout(createIcosahedron, 100);
+            // flag = 0;
+            speed += 0.001;
+        }
+
+        const elapsed = clock.getElapsedTime();
+
+        if (selected[0]) {
+            selected[0].material.emissive.setHex(elapsed % 0.5 >= 0.25 ? original[0] : 0x000000);
+        }
+
+        renderer.render(scene, camera)
+        requestAnimationFrame(mainLoop)
+    };
+
+    ///////////////////////////////////////////////
+    init();
+    mainLoop();
+</script>
+    
